@@ -25,8 +25,6 @@
             Fraction.Create(numerator, denominator)
 
         member this.Simplify() = 
-            let rest = this.Numerator % this.Denominator;
-            if (rest = 0) then
-                Fraction.Create(this.Numerator / this.Denominator, 1)
-            else 
-                this
+            match this.Numerator % this.Denominator with 
+            | 0 -> Fraction.Create(this.Numerator / this.Denominator, 1)
+            | _ -> this
