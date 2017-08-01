@@ -16,6 +16,11 @@ namespace jbrains_tdd_intro.tests
             Check.That(() => F(1, 2) == F(1, 2));
         }
 
+        public void to_string()
+        {
+            Check.That(() => F(1, 2).ToString() == "1/2");
+        }
+
         public void _0_plus_0()
         {
             Check.That(() => (F(0) + F(0)).ToFloat() == 0.0);
@@ -40,6 +45,20 @@ namespace jbrains_tdd_intro.tests
             Check.That(() => result.ToFloat() == 1.5,
                 () => result.Numerator == 3,
                 () => result.Denominator == 2);
+        }
+
+        public void _7by3_plus_4by5()
+        {
+            var result = F(7, 3) + F(4, 5);
+            Check.That(
+                () => result.Numerator == 47,
+                () => result.Denominator == 15);
+        }
+
+        public void _4by2_plus_4by2()
+        {
+            var result = F(4, 2) + F(4, 2);
+            Check.That(() => result == F(4, 1));
         }
 
         private Fraction F(int numerator, int denominator)

@@ -15,8 +15,16 @@
         static member op_Equality ((a: Fraction), (b: Fraction)) = a.Equals(b)
         static member op_Inequality ((a: Fraction), (b: Fraction)) = a.Equals(b) = false
 
+        override this.ToString() = 
+            sprintf "%i/%i" this.Numerator this.Denominator
+
         static member (+) ((a: Fraction), (b: Fraction)) = 
             let numerator = a.Numerator * b.Denominator + a.Denominator * b.Numerator
             let denominator = a.Denominator * b.Denominator
-            Fraction.Create(numerator, denominator)
-
+            
+            let rest = numerator % denominator;
+            if (rest = 0) then
+                Fraction.Create(numerator / denominator, 1)
+            else 
+                Fraction.Create(numerator, denominator)
+                
