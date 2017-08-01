@@ -9,22 +9,24 @@
         static member Create (numerator, denominator) = 
             { Numerator = numerator; Denominator = denominator }
 
-        member this.ToFloat() = 
-            (float)this.Numerator / (float)this.Denominator
-
         static member op_Equality ((a: Fraction), (b: Fraction)) = a.Equals(b)
         static member op_Inequality ((a: Fraction), (b: Fraction)) = a.Equals(b) = false
 
         override this.ToString() = 
             sprintf "%i/%i" this.Numerator this.Denominator
 
-        static member (+) ((a: Fraction), (b: Fraction)) = 
+        static member (+) ((a': Fraction), (b': Fraction)) = 
+            let a = a'.Simplify()
+            let b = b'.Simplify()
+
             let numerator = a.Numerator * b.Denominator + a.Denominator * b.Numerator
             let denominator = a.Denominator * b.Denominator
             
-            let rest = numerator % denominator;
+            Fraction.Create(numerator, denominator)
+
+        member this.Simplify() = 
+            let rest = this.Numerator % this.Denominator;
             if (rest = 0) then
-                Fraction.Create(numerator / denominator, 1)
+                Fraction.Create(this.Numerator / this.Denominator, 1)
             else 
-                Fraction.Create(numerator, denominator)
-                
+                this
