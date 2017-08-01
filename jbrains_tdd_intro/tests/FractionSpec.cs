@@ -26,6 +26,22 @@ namespace jbrains_tdd_intro.tests
             Check.That(() => (F(1) + F(1)).ToFloat() == 2.0);
         }
 
+        public void _1_plus_2()
+        {
+            var result = F(1) + F(2);
+            Check.That(() => result.ToFloat() == 3.0, 
+                () => result.Numerator == 3, 
+                () => result.Denominator == 1);
+        }
+
+        public void _1_plus_1by2()
+        {
+            var result = F(1) + F(1, 2);
+            Check.That(() => result.ToFloat() == 1.5,
+                () => result.Numerator == 3,
+                () => result.Denominator == 2);
+        }
+
         private Fraction F(int numerator, int denominator)
         {
             return Fraction.Create(numerator, denominator);

@@ -16,5 +16,7 @@
         static member op_Inequality ((a: Fraction), (b: Fraction)) = a.Equals(b) = false
 
         static member (+) ((a: Fraction), (b: Fraction)) = 
-            Fraction.Create(a.Numerator + b.Numerator, a.Denominator)
+            let numerator = a.Numerator * b.Denominator + a.Denominator * b.Numerator
+            let denominator = a.Denominator * b.Denominator
+            Fraction.Create(numerator, denominator)
 
