@@ -3,12 +3,12 @@ using under_test;
 
 namespace jbrains_tdd_intro.tests
 {
-    [Describe(typeof(under_test.Class1))]
-    public class Class1Spec
+    [Describe(typeof(under_test.Fraction))]
+    public class FractionSpec
     {
-        public void x_is_f_sharp()
+        public void to_float()
         {
-            Check.That(() => new Class1().X == "F#");
+            Check.That(() => Fraction.Create(1, 2).ToFloat() == 0.5);
         }
     }
 }
