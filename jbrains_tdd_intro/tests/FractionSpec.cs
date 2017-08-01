@@ -16,9 +16,19 @@ namespace jbrains_tdd_intro.tests
             Check.That(() => F(1, 2) == F(1, 2));
         }
 
-        private Fraction F(int nunerator, int denominator)
+        public void _0_plus_0()
         {
-            return Fraction.Create(nunerator, denominator);
+            Check.That(() => (F(0) + F(0)).ToFloat() == 0.0);
+        }
+
+        private Fraction F(int numerator, int denominator)
+        {
+            return Fraction.Create(numerator, denominator);
+        }
+
+        private Fraction F(int value)
+        {
+            return Fraction.Create(value);
         }
     }
 }
