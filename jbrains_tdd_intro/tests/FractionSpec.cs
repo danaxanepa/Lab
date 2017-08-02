@@ -72,7 +72,6 @@ namespace jbrains_tdd_intro.tests
                 () => result == F(4));
         }
 
-        [Pending]
         public void reduce_to_common_divisor()
         {
             var result = F(1, 4) + F(2, 16);

@@ -22,15 +22,15 @@
             sprintf "%i/%i" this.Numerator this.Denominator
 
         static member (+) ((a': Fraction), (b': Fraction)) = 
-            let a = a'.Simplify()
-            let b = b'.Simplify()
+            let a = a'.Reduce()
+            let b = b'.Reduce()
 
             let numerator = a.Numerator * b.Denominator + a.Denominator * b.Numerator
             let denominator = a.Denominator * b.Denominator
             
             Fraction.Create(numerator, denominator)
 
-        member this.Simplify() = 
+        member this.Reduce() = 
             match this.Numerator % this.Denominator with 
             | 0 -> Fraction.Create(this.Numerator / this.Denominator, 1)
             | _ -> this
