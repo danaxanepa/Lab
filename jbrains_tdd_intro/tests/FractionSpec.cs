@@ -32,31 +32,25 @@ namespace jbrains_tdd_intro.tests
             Check.That(() => result == F(3));
         }
 
-        public void _1_plus_1by2()
+        public void one_non_zero_denominator()
         {
             var result = F(1) + F(1, 2);
             Check.That(() => result == F(3, 2));
         }
 
-        public void _7by3_plus_4by5()
+        public void non_zero_but_same_denominators()
+        {
+            var result = F(2, 2) + F(1, 2);
+            Check.That(
+                () => result == F(3, 2));
+        }
+
+        public void non_zero_prime_denominators()
         {
             var result = F(7, 3) + F(4, 5);
             Check.That(
                 () => result.Numerator == 47,
                 () => result.Denominator == 15);
-        }
-
-        public void _4by2_plus_4by2()
-        {
-            var result = F(4, 2) + F(4, 2);
-            Check.That(() => result == F(4, 1));
-        }
-
-        public void _2by2_plus_1by2()
-        {
-            var result = F(2, 2) + F(1, 2);
-            Check.That(
-                () => result == F(3, 2));
         }
 
         private Fraction F(int numerator, int denominator)
