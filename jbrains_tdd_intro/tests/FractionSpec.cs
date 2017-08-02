@@ -21,15 +21,27 @@ namespace jbrains_tdd_intro.tests
             Check.That(() => (F(0) + F(0)) == F(0));
         }
 
-        public void _1_plus_1()
+        public void _0_plus_1()
         {
-            Check.That(() => (F(1) + F(1)) == F(2));
+            Check.That(() => (F(0) + F(1)) == F(1));
         }
 
         public void _1_plus_2()
         {
             var result = F(1) + F(2);
             Check.That(() => result == F(3));
+        }
+
+        public void two_integers_one_negative()
+        {
+            var result = F(-2) + F(5);
+            Check.That(() => result == F(3));
+        }
+
+        public void two_negative_integers()
+        {
+            var result = F(-2) + F(-5);
+            Check.That(() => result == F(-7));
         }
 
         public void one_non_zero_denominator()
