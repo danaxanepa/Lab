@@ -21,16 +21,12 @@
         override this.ToString() = 
             sprintf "%i/%i" this.Numerator this.Denominator
 
-        static member (+) ((a': Fraction), (b': Fraction)) = 
-            let a = a'.Reduce()
-            let b = b'.Reduce()
-
+        static member (+) ((a: Fraction), (b: Fraction)) = 
             let numerator = a.Numerator * b.Denominator + a.Denominator * b.Numerator
             let denominator = a.Denominator * b.Denominator
             
-            Fraction.Create(numerator, denominator)
+            Fraction.Create(numerator, denominator).Reduce()
 
         member this.Reduce() = 
-            match this.Numerator % this.Denominator with 
-            | 0 -> Fraction.Create(this.Numerator / this.Denominator, 1)
-            | _ -> this
+            let gcd = Math.gcd this.Numerator this.Denominator
+            Fraction.Create(this.Numerator / gcd, this.Denominator / gcd)
