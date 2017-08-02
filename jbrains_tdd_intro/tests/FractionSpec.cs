@@ -65,6 +65,21 @@ namespace jbrains_tdd_intro.tests
                 () => result.Denominator == 15);
         }
 
+        public void reduce_to_whole_number()
+        {
+            var result = F(4, 2) + F(4, 2);
+            Check.That(
+                () => result == F(4));
+        }
+
+        [Pending]
+        public void reduce_to_common_divisor()
+        {
+            var result = F(1, 4) + F(2, 16);
+            Check.That(
+                () => result == F(3, 8));
+        }
+
         private Fraction F(int numerator, int denominator)
         {
             return Fraction.Create(numerator, denominator);
