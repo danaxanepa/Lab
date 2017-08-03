@@ -1,0 +1,10 @@
+﻿When receiving a barcode
+
+	If the barcode is valid and we have a price for it display that price
+
+	If the barcode is not known -> "No price found"
+
+	null -> "Invalid barcode"
+
+	string.Empty -> "Invalid barcode"
+
