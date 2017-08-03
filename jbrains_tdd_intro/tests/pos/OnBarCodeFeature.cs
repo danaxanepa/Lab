@@ -6,14 +6,24 @@ namespace jbrains_tdd_intro.tests.pos
     [Feature("OnBarCode")]
     public class OnBarCodeFeature
     {
-        public void null_gives_invalid_barcode()
+        [Row((string)null)]
+        [Row("")]
+        public void invalid_barcode(string value)
         {
             var fakeDisplay = new FakeDisplay();
-            System(fakeDisplay).OnBarCode(BarCode.Create(null));
+            System(fakeDisplay).OnBarCode(BarCode.Create(value));
             Check.That(() => fakeDisplay.LastMessage == "Invalid barcode");
         }
 
-        private under_test.PointOfSaleSystem System(Display display)
+        public void handle_unknown_barcode()
+        {
+            var fakeDisplay = new FakeDisplay();
+            System(fakeDisplay).OnBarCode(BarCode.Create("12345"));
+            Check.That(() => fakeDisplay.LastMessage == "No price found");
+
+        }
+
+        private PointOfSaleSystem System(Display display)
         {
             return new PointOfSaleSystem(display);
         }
