@@ -19,7 +19,7 @@
 
         member this.IsEmpty = this.Value.IsNone
 
-        member this.ToString () = 
+        override this.ToString () = 
             match this.Value with
             | None -> System.String.Empty
             | Some a -> a.ToString()
