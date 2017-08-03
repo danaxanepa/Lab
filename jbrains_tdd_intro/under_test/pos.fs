@@ -10,10 +10,31 @@
     type Display = 
         abstract member Print : string -> unit
 
-    type PointOfSaleSystem (display: Display) =
+    type Price = 
+        { Value: Option<float> }
+
+        static member Create value = { Value = Some value }
+        static member Empty = { Value = None }
+
+        member this.IsEmpty = this.Value.IsNone
+
+        member this.ToString () = 
+            match this.Value with
+            | None -> System.String.Empty
+            | Some a -> a.ToString()
+
+    type PriceService =
+        abstract member GetPrice : BarCode -> Price
+
+    type PointOfSaleSystem (display: Display, prices: PriceService) =
         
         member this.OnBarCode (value: BarCode) = 
-            if (value.IsEmpty) then
-                display.Print "Invalid barcode"
-            else
-                display.Print "No price found"
+            let getMessage = 
+                if (value.IsEmpty) then
+                    "Invalid barcode"
+                else
+                    let price = prices.GetPrice value
+                    match price.IsEmpty with
+                    | true -> "No price found"
+                    | false -> price.ToString()
+            display.Print getMessage
