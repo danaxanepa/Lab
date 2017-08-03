@@ -1,22 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Cone;
 using under_test;
 
 namespace jbrains_tdd_intro.tests.pos
 {
+    [Describe(typeof(BarCode))]
+    public class BarCodeSpec
+    {
+        public void does_not_accept_null()
+        {
+            Check.Exception<ArgumentException>(() => BarCode.Create(null));
+        }
+
+        public void does_not_accept_empty()
+        {
+            Check.Exception<ArgumentException>(() => BarCode.Create(string.Empty));
+        }
+    }
+
     [Feature("OnBarCode")]
     public class OnBarCodeFeature
     {
-        [Row((string)null)]
-        [Row("")]
-        public void invalid_barcode(string value)
-        {
-            var fakeDisplay = new FakeDisplay();
-            System(fakeDisplay).OnBarCode(BarCode.Create(value));
-            Check.That(() => fakeDisplay.LastMessage == "Invalid barcode");
-        }
-
         public void handle_unknown_barcode()
         {
             var fakeDisplay = new FakeDisplay();
