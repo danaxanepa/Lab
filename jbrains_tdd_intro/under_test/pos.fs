@@ -8,6 +8,9 @@
             else
                 { Value = v }
 
+        override this.ToString () = 
+            this.Value
+
     type Display = 
         abstract member Print : string -> unit
 
@@ -33,6 +36,6 @@
             let getMessage = 
                 let price = prices.GetPrice value
                 match price.IsEmpty with
-                | true -> "No price found"
+                | true -> sprintf "No price found for '%s'" (value.ToString())
                 | false -> price.ToString()
             display.Print getMessage

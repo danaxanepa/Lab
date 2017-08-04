@@ -12,7 +12,7 @@ namespace jbrains_tdd_intro.tests.pos
         {
             var fakeDisplay = new FakeDisplay();
             System(fakeDisplay).OnBarCode(BarCode.Create("12345"));
-            Check.That(() => fakeDisplay.LastMessage == "No price found");
+            Check.That(() => fakeDisplay.LastMessage == "No price found for '12345'");
         }
 
         public void show_price_for_known_barcode()
