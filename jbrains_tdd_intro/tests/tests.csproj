@@ -56,7 +56,10 @@
     <Compile Include="FractionSpec.cs" />
     <Compile Include="GCDSpec.cs" />
     <Compile Include="pos\BarCodeSpec.cs" />
+    <Compile Include="pos\FakeDisplay.cs" />
+    <Compile Include="pos\FakePriceService.cs" />
     <Compile Include="pos\OnBarCodeFeature.cs" />
+    <Compile Include="pos\Setup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
