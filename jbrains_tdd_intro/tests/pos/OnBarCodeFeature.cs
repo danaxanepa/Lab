@@ -5,8 +5,8 @@ using under_test;
 
 namespace jbrains_tdd_intro.tests.pos
 {
-    [Feature("SellOneItem")]
-    public class SellOneItemFeature
+    [Feature("OnBarCodeFeature")]
+    public class OnBarCodeFeature
     {
         public void handle_unknown_barcode()
         {
