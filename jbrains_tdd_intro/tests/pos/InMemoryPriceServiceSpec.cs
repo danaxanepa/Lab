@@ -1,6 +1,5 @@
 using System;
 using Cone;
-using Microsoft.FSharp.Control;
 using under_test;
 
 namespace jbrains_tdd_intro.tests.pos
@@ -8,6 +7,14 @@ namespace jbrains_tdd_intro.tests.pos
     [Describe(typeof(InMemoryPriceService))]
     public class InMemoryPriceServiceSpec
     {
+        public void gives_price_given_barcode()
+        {
+            var bc = BarCode.Create("123");
+            var price = Price.Create(0.5);
+            var result = Service(_ => {}, Tuple.Create(bc, price)).GetPrice(bc);
+            Check.That(() => result == price);
+        }
+
         public void should_notify_on_price_not_found()
         {
             BarCode notFound = null;
@@ -20,9 +27,9 @@ namespace jbrains_tdd_intro.tests.pos
                 () => notFound == BarCode.Create("123"));
         }
 
-        private static PriceService Service(Action<BarCode> notification)
+        private static PriceService Service(Action<BarCode> notification, params Tuple<BarCode, Price>[] prices)
         {
-            var service = new InMemoryPriceService();
+            var service = new InMemoryPriceService(prices);
             service.PriceNotFound += (sender, args) => notification(args.BarCode);
             return service;
         }

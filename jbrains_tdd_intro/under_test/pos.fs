@@ -1,5 +1,7 @@
 ﻿namespace under_test
 
+    open System.Collections.Generic
+
     type BarCode = 
         { Value: string }
         static member Create v = 
@@ -45,14 +47,18 @@
         inherit System.EventArgs()
         member this.BarCode = code
      
-     type InMemoryPriceService () = 
-        
+     type InMemoryPriceService (values : seq<BarCode * Price>) = 
         let priceNotFound = new Event<PriceNotFoundEvent>()
-        
+
+        member this.prices = values |> Map.ofSeq
+
         [<CLIEvent>]
         member this.PriceNotFound = priceNotFound.Publish
         
         interface PriceService with
             member this.GetPrice barCode = 
-                priceNotFound.Trigger (new PriceNotFoundEvent(barCode))
-                Price.Empty
+                match this.prices.TryFind barCode with
+                | Some p -> p
+                | _ -> 
+                    priceNotFound.Trigger (new PriceNotFoundEvent(barCode))
+                    Price.Empty
