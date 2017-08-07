@@ -20,7 +20,15 @@
         { Value: Option<float> }
 
         static member Create value = { Value = Some value }
+        static member Zero = Price.Create 0.0
         static member Empty = { Value = None }
+
+        static member (+) (a, b) = 
+            match (a.Value, b.Value) with
+            | (None, None) -> Price.Empty
+            | (None, Some b') -> b
+            | (Some a', None) -> a
+            | (Some a', Some b') -> Price.Create(a' + b')
 
         member this.IsEmpty = this.Value.IsNone
 
@@ -34,16 +42,21 @@
 
     type PointOfSaleSystem (display: Display, prices: PriceService) =
         
+        let session = new List<Price>()
+
         member this.OnBarCode (value: BarCode) = 
             let getMessage = 
                 let price = prices.GetPrice value
                 match price.IsEmpty with
                 | true -> sprintf "No price found for '%s'" (value.ToString())
-                | false -> price.ToString()
+                | false -> 
+                    session.Add(price)
+                    price.ToString()
             display.Print getMessage
      
         member this.OnTotal() = 
-            display.Print "Total: 0"
+            let total = session |> Seq.sum
+            display.Print (sprintf "Total: %s" <| total.ToString())
      
      type PriceNotFoundEvent (code: BarCode) = 
         inherit System.EventArgs()
