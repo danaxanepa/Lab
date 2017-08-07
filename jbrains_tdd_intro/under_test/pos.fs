@@ -40,12 +40,19 @@
                 | false -> price.ToString()
             display.Print getMessage
      
+     
+     type PriceNotFoundEvent (code: BarCode) = 
+        inherit System.EventArgs()
+        member this.BarCode = code
+     
      type InMemoryPriceService () = 
         
-        let priceNotFound = new Event<BarCode>()
+        let priceNotFound = new Event<PriceNotFoundEvent>()
         
-        member this.NameChanged = priceNotFound.Publish
+        [<CLIEvent>]
+        member this.PriceNotFound = priceNotFound.Publish
         
         interface PriceService with
             member this.GetPrice barCode = 
+                priceNotFound.Trigger (new PriceNotFoundEvent(barCode))
                 Price.Empty
