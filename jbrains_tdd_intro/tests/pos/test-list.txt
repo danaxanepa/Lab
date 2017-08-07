@@ -1,12 +1,12 @@
-﻿When receiving a barcode
+﻿x - When receiving a barcode
 
-	If the barcode is valid and we have a price for it display that price
+	x - If the barcode is valid and we have a price for it display that price
 
-	If the barcode is not known -> "No price found"
+	x - If the barcode is not known -> "No price found"
 
-	null -> "Invalid barcode"
+	x - null -> "Invalid barcode"
 
-	string.Empty -> "Invalid barcode"
+	x - string.Empty -> "Invalid barcode"
 
 When selling multiple items
 
@@ -18,4 +18,4 @@ When selling multiple items
 
 	As a cashier, I need to be able to input a price manually if not found by the system
 
-	As a price manager I need to be notified when a price is not found for a product so that I can update the price list
+	x - As a price manager I need to be notified when a price is not found for a product so that I can update the price list
