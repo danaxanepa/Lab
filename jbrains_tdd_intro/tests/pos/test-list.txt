@@ -10,13 +10,13 @@
 
 When selling multiple items
 
-	Show the total price when "total is clicked"
+	x - Show the total price when "total is clicked"
 
 		Sell 1 item and show total
 		Sell 3 items and all are found
 		Sell 3 items and 2 are found
 		Sell 3 items and none are found
 
-	As a cashier, I need to be able to input a price manually if not found by the system
+	x - As a cashier, I need to be able to input a price manually if not found by the system
 
 	x - As a price manager I need to be notified when a price is not found for a product so that I can update the price list

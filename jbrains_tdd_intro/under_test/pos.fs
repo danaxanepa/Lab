@@ -73,9 +73,13 @@
             let manualPricesMap = manualPrices |> Map.ofSeq
             let manulPricesFound = missingPrices |> Seq.map manualPricesMap.TryFind |> Seq.filter Option.isSome |> Seq.map Option.get
             let total = session |> Seq.append manulPricesFound |> Seq.sum
-            let reallyMissingPrices = missingPrices |> Seq.filter (fun x -> (manualPricesMap.ContainsKey x) = false)
+            let reallyMissingPrices = missingPrices |> Seq.filter (fun x -> (manualPricesMap.ContainsKey x) = false) |> Seq.toList
+            
             let missingPricesMessage = 
-                if reallyMissingPrices.Any() then (" No price for " + System.String.Join(", ", missingPrices)) else ""
+                match reallyMissingPrices with
+                | [] -> ""
+                | x -> " No price for " + System.String.Join(", ", x)
+
             display.Print (sprintf "Total: %s%s" (total.ToString()) missingPricesMessage)
      
      type InMemoryPriceService (values : seq<BarCode * Price>) = 
