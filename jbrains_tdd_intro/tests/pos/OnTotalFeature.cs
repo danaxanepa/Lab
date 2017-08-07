@@ -47,7 +47,6 @@ namespace jbrains_tdd_intro.tests.pos
             Check.That(() => fakeDisplay.LastMessage == $"Total: 3");
         }
 
-        [Pending]
         public void show_total_price_for_multiple_items_when_1_price_not_found()
         {
             var fakeDisplay = new FakeDisplay();
@@ -67,6 +66,29 @@ namespace jbrains_tdd_intro.tests.pos
             system.OnTotal();
 
             Check.That(() => fakeDisplay.LastMessage == $"Total: 4 No price for 789");
+        }
+
+        public void show_total_price_for_multiple_items_when_some_prices_not_found()
+        {
+            var fakeDisplay = new FakeDisplay();
+            var code1 = BarCode.Create("123");
+            var code2 = BarCode.Create("456");
+            var code3 = BarCode.Create("7891");
+            var code4 = BarCode.Create("7890");
+            var fakePriceService = new FakePriceService()
+            {
+                { code1, Price.Create(1) },
+                { code2, Price.Create(3) }
+            };
+
+            var system = Setup.System(fakeDisplay, fakePriceService);
+            system.OnBarCode(code1);
+            system.OnBarCode(code2);
+            system.OnBarCode(code3);
+            system.OnBarCode(code4);
+            system.OnTotal();
+
+            Check.That(() => fakeDisplay.LastMessage == $"Total: 4 No price for 7891, 7890");
         }
     }
 }

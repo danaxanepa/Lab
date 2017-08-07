@@ -1,5 +1,6 @@
 ﻿namespace under_test
 
+    open System.Linq
     open System.Collections.Generic
 
     type BarCode = 
@@ -49,9 +50,14 @@
         abstract member PriceNotFound : IEvent<PriceNotFoundEventArgs>
 
     type PointOfSaleSystem (display: Display, prices: PriceService) =
-        
         let session = new List<Price>()
-
+        let missingPrices = new List<BarCode>()
+        do
+            prices.PriceNotFound.AddHandler (fun sender e -> missingPrices.Add e.BarCode)
+        
+        member this.display = display
+        member this.prices = prices
+        
         member this.OnBarCode (value: BarCode) = 
             let getMessage = 
                 let price = prices.GetPrice value
@@ -64,13 +70,14 @@
      
         member this.OnTotal() = 
             let total = session |> Seq.sum
-            display.Print (sprintf "Total: %s" <| total.ToString())
+            let missingPricesMessage = 
+                if missingPrices.Any() then (" No price for " + System.String.Join(", ", missingPrices)) else ""
+            display.Print (sprintf "Total: %s%s" (total.ToString()) missingPricesMessage)
      
      type InMemoryPriceService (values : seq<BarCode * Price>) = 
         let priceNotFound = new Event<PriceNotFoundEventArgs>()
 
         member this.prices = values |> Map.ofSeq
-
         
         interface PriceService with
             [<CLIEvent>]
