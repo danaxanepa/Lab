@@ -64,6 +64,7 @@
     <Compile Include="pos\FakePriceService.cs" />
     <Compile Include="pos\InMemoryPriceServiceSpec.cs" />
     <Compile Include="pos\OnBarCodeFeature.cs" />
+    <Compile Include="pos\OnTotalFeature.cs" />
     <Compile Include="pos\Setup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

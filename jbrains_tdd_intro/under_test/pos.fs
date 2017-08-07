@@ -42,6 +42,8 @@
                 | false -> price.ToString()
             display.Print getMessage
      
+        member this.OnTotal() = 
+            display.Print "Total: 0"
      
      type PriceNotFoundEvent (code: BarCode) = 
         inherit System.EventArgs()
