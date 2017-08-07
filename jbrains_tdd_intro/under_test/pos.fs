@@ -1,5 +1,6 @@
 ﻿namespace under_test
 
+    open System
     open System.Linq
     open System.Collections.Generic
 
@@ -68,10 +69,13 @@
                     price.ToString()
             display.Print getMessage
      
-        member this.OnTotal() = 
-            let total = session |> Seq.sum
+        member this.OnTotal([<ParamArray>] manualPrices : (BarCode * Price) array) = 
+            let manualPricesMap = manualPrices |> Map.ofSeq
+            let manulPricesFound = missingPrices |> Seq.map manualPricesMap.TryFind |> Seq.filter Option.isSome |> Seq.map Option.get
+            let total = session |> Seq.append manulPricesFound |> Seq.sum
+            let reallyMissingPrices = missingPrices |> Seq.filter (fun x -> (manualPricesMap.ContainsKey x) = false)
             let missingPricesMessage = 
-                if missingPrices.Any() then (" No price for " + System.String.Join(", ", missingPrices)) else ""
+                if reallyMissingPrices.Any() then (" No price for " + System.String.Join(", ", missingPrices)) else ""
             display.Print (sprintf "Total: %s%s" (total.ToString()) missingPricesMessage)
      
      type InMemoryPriceService (values : seq<BarCode * Price>) = 
