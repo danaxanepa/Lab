@@ -37,8 +37,16 @@
             | None -> System.String.Empty
             | Some a -> a.ToString()
 
+    type PriceNotFoundEventArgs (code: BarCode) = 
+        inherit System.EventArgs()
+        member this.BarCode = code
+
+    type MyDelegate = delegate of obj * PriceNotFoundEventArgs -> unit
+
     type PriceService =
         abstract member GetPrice : BarCode -> Price
+        [<CLIEvent>]
+        abstract member PriceNotFound : IEvent<PriceNotFoundEventArgs>
 
     type PointOfSaleSystem (display: Display, prices: PriceService) =
         
@@ -58,22 +66,19 @@
             let total = session |> Seq.sum
             display.Print (sprintf "Total: %s" <| total.ToString())
      
-     type PriceNotFoundEvent (code: BarCode) = 
-        inherit System.EventArgs()
-        member this.BarCode = code
-     
      type InMemoryPriceService (values : seq<BarCode * Price>) = 
-        let priceNotFound = new Event<PriceNotFoundEvent>()
+        let priceNotFound = new Event<PriceNotFoundEventArgs>()
 
         member this.prices = values |> Map.ofSeq
 
-        [<CLIEvent>]
-        member this.PriceNotFound = priceNotFound.Publish
         
         interface PriceService with
+            [<CLIEvent>]
+            member this.PriceNotFound = priceNotFound.Publish
+        
             member this.GetPrice barCode = 
                 match this.prices.TryFind barCode with
                 | Some p -> p
                 | _ -> 
-                    priceNotFound.Trigger (new PriceNotFoundEvent(barCode))
+                    priceNotFound.Trigger (new PriceNotFoundEventArgs(barCode))
                     Price.Empty

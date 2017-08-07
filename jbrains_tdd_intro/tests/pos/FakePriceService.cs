@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Microsoft.FSharp.Control;
 using under_test;
 
 namespace jbrains_tdd_intro.tests.pos
@@ -15,10 +16,12 @@ namespace jbrains_tdd_intro.tests.pos
             Price price;
             if (prices.TryGetValue(code, out price))
                 return price;
+            PriceNotFound?.Invoke(this, new PriceNotFoundEventArgs(code));
             return Price.Empty;
         }
 
         public IEnumerator<KeyValuePair<BarCode, Price>> GetEnumerator() => prices.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public event FSharpHandler<PriceNotFoundEventArgs> PriceNotFound;
     }
 }

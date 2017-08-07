@@ -29,7 +29,7 @@ namespace jbrains_tdd_intro.tests.pos
 
         private static PriceService Service(Action<BarCode> notification, params Tuple<BarCode, Price>[] prices)
         {
-            var service = new InMemoryPriceService(prices);
+            PriceService service = new InMemoryPriceService(prices);
             service.PriceNotFound += (sender, args) => notification(args.BarCode);
             return service;
         }
