@@ -10,7 +10,11 @@
 
 When selling multiple items
 
-	Show the total price
+	Show the total price when "total is clicked"
+
+		Sell 3 items and all are found
+		Sell 3 items and 2 are found
+		Sell 3 items and none are found
 
 	As a cashier, I need to be able to input a price manually if not found by the system
 

@@ -39,3 +39,13 @@
                 | true -> sprintf "No price found for '%s'" (value.ToString())
                 | false -> price.ToString()
             display.Print getMessage
+     
+     type InMemoryPriceService () = 
+        
+        let priceNotFound = new Event<BarCode>()
+        
+        member this.NameChanged = priceNotFound.Publish
+        
+        interface PriceService with
+            member this.GetPrice barCode = 
+                Price.Empty
