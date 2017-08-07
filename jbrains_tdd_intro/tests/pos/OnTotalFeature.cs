@@ -25,8 +25,26 @@ namespace jbrains_tdd_intro.tests.pos
             system.OnBarCode(code);
             system.OnTotal();
 
-            var expected = $"Total: {price}";
-            Check.That(() => fakeDisplay.LastMessage == expected);
+            Check.That(() => fakeDisplay.LastMessage == $"Total: {price}");
+        }
+
+        public void show_total_price_for_multiple_items()
+        {
+            var fakeDisplay = new FakeDisplay();
+            var code1 = BarCode.Create("123");
+            var code2 = BarCode.Create("456");
+            var fakePriceService = new FakePriceService()
+            {
+                { code1, Price.Create(1) },
+                { code2, Price.Create(2) }
+            };
+
+            var system = Setup.System(fakeDisplay, fakePriceService);
+            system.OnBarCode(code1);
+            system.OnBarCode(code2);
+            system.OnTotal();
+
+            Check.That(() => fakeDisplay.LastMessage == $"Total: 3");
         }
     }
 }
