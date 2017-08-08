@@ -50,11 +50,20 @@
         [<CLIEvent>]
         abstract member PriceNotFound : IEvent<PriceNotFoundEventArgs>
 
-    type PointOfSaleSystem (display: Display, prices: PriceService) =
+    type ShoppingSession () = 
         let session = new List<Price>()
         let missingPrices = new List<BarCode>()
+
+        member this.RegisterMissingPrice barCode = missingPrices.Add barCode
+        member this.RegisterPrice price = session.Add price
+        member this.MissingPrices () = missingPrices
+        member this.Prices() = session
+
+
+    type PointOfSaleSystem (display: Display, prices: PriceService) =
+        let session = new ShoppingSession()
         do
-            prices.PriceNotFound.AddHandler (fun sender e -> missingPrices.Add e.BarCode)
+            prices.PriceNotFound.AddHandler (fun sender e -> session.RegisterMissingPrice e.BarCode)
         
         member this.display = display
         member this.prices = prices
@@ -65,15 +74,15 @@
                 match price.IsEmpty with
                 | true -> sprintf "No price found for '%s'" (value.ToString())
                 | false -> 
-                    session.Add(price)
+                    session.RegisterPrice price
                     price.ToString()
             display.Print getMessage
      
         member this.OnTotal([<ParamArray>] manualPrices : (BarCode * Price) array) = 
             let manualPricesMap = manualPrices |> Map.ofSeq
-            let manulPricesFound = missingPrices |> Seq.map manualPricesMap.TryFind |> Seq.filter Option.isSome |> Seq.map Option.get
-            let total = session |> Seq.append manulPricesFound |> Seq.sum
-            let reallyMissingPrices = missingPrices |> Seq.filter (fun x -> (manualPricesMap.ContainsKey x) = false) |> Seq.toList
+            let manulPricesFound = session.MissingPrices() |> Seq.map manualPricesMap.TryFind |> Seq.filter Option.isSome |> Seq.map Option.get
+            let total = session.Prices() |> Seq.append manulPricesFound |> Seq.sum
+            let reallyMissingPrices = session.MissingPrices() |> Seq.filter (fun x -> (manualPricesMap.ContainsKey x) = false) |> Seq.toList
             
             let missingPricesMessage = 
                 match reallyMissingPrices with
