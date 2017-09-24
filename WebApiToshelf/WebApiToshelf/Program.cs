@@ -37,7 +37,6 @@ namespace WebApiToshelf
                     s.WhenStarted(h => h.Start(7603));
                     s.WhenStopped(h => h.Stop());
                 });
-                x.RunAsLocalSystem();
             });
             return (int)exitCode;
         }
