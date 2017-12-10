@@ -1,1 +1,1 @@
-packages\Cone.Conesole.2017.7.31.1\tools\net452\Conesole.exe --autotest tests\bin\Debug\jbrains_tdd_intro.tests.dll
+packages\Cone.Conesole.2017.7.31.1\tools\net452\Conesole.exe --autotest tests\bin\Debug\net462\tests.dll
